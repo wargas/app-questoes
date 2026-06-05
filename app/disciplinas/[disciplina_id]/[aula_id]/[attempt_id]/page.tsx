@@ -1,4 +1,5 @@
 'use server'
+import { FormLoading } from "@/components/form-loading"
 import { Alert, AlertTitle } from "@/components/ui/alert"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -160,7 +161,9 @@ export default async function ({ params, searchParams }: PageProps<"/disciplinas
                 <CardFooter>
                     <div className="flex items-center gap-4">
 
-                        <Button disabled={!!hasResponse} type="submit" variant={'default'}>Responder</Button>
+                        <Button disabled={!!hasResponse} type="submit" variant={'default'}>
+                            <FormLoading />
+                            Responder</Button>
                         {hasResponse && (
                             <span className={cn({ "text-red-500": !hasResponse.correct, "text-green-500": hasResponse.correct }, "font-bold")} >{hasResponse.correct ? "Você acertou!!!" : "Você errou!!!"}</span>
                         )}

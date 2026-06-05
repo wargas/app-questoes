@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { FormLoading } from "@/components/form-loading";
 
 export default async function DisciplinasPage({ params, searchParams }: PageProps<"/disciplinas/[disciplina_id]">) {
 
@@ -93,7 +94,9 @@ export default async function DisciplinasPage({ params, searchParams }: PageProp
                             <Button variant={`outline`} asChild>
                                 <Link href={`/disciplinas/${disciplina_id}`}>Cancelar</Link>
                             </Button>
-                            <Button type="submit" variant={'default'}>Salvar</Button>
+                            <Button type="submit" variant={'default'}>
+                                <FormLoading />
+                                Salvar</Button>
                         </DialogFooter>
                     </Form>
                 </DialogContent>
