@@ -1,0 +1,115 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Users {
+  id       String @id @default(cuid())
+  name     String
+  email    String
+  password String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  responses Response[]
+}
+
+model Discipline {
+  id   String @id @default(cuid())
+  name String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  subjects Subject[]
+
+  @@map("disciplines")
+}
+
+model Subject {
+  id           String     @id @default(cuid())
+  name         String
+  discipline   Discipline @relation(fields: [disciplineid], references: [id])
+  disciplineid String
+
+  questions Question[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("subjects")
+  attempts Attempt[]
+}
+
+model Question {
+  id             String @id @default(cuid())
+  statement      String
+  option_correct String
+  subjectid      String
+
+  options   Option[]
+  responses Response[]
+  subject   Subject    @relation(fields: [subjectid], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("questions")
+}
+
+model Option {
+  id         String     @id @default(cuid())
+  index      String
+  text       String
+  questionid String
+  question   Question   @relation(fields: [questionid], references: [id])
+  responses  Response[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("options")
+}
+
+model Response {
+  id          String  @id @default(cuid())
+  questionid  String
+  optionid    String
+  optionIndex String  @default("")
+  userid      String
+  attemptid String
+  correct     Boolean
+
+  question Question @relation(fields: [questionid], references: [id])
+  option   Option   @relation(fields: [optionid], references: [id])
+  user     Users    @relation(fields: [userid], references: [id])
+  attempt Attempt @relation(fields: [attemptid], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("responses")
+}
+
+model Attempt {
+  id        String   @id @default(cuid())
+  subjectid String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  done      Boolean
+
+  subject Subject @relation(fields: [subjectid], references: [id])
+
+  @@map("attempts")
+  responses Response[]
+}
