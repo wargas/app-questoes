@@ -1,3 +1,4 @@
+'use client'
 import Link from "next/link";
 import { Input } from "./ui/input";
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuAction, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarRail, SidebarTrigger } from "./ui/sidebar";

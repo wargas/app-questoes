@@ -178,7 +178,10 @@ export default async function ({ params, searchParams }: PageProps<"/disciplinas
                             </Link>
                         </Button>
                         <Button variant={`secondary`} asChild>
-                            <span>{questaoIndex}/{total}</span>
+                            <Link href={`${pathname}&showList=true`}>
+
+                                <span>{questaoIndex}/{total}</span>
+                            </Link>
                         </Button>
                         <Button asChild variant={'outline'}>
                             <Link href={`?q=${Math.min(total, parseInt(String(questaoIndex)) + 1)}`}>
