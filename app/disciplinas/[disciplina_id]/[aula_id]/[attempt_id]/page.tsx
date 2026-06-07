@@ -1,5 +1,6 @@
 'use server'
 import { FormLoading } from "@/components/form-loading"
+import { Markdown } from "@/components/markdown"
 import { Alert, AlertTitle } from "@/components/ui/alert"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -46,7 +47,7 @@ export default async function ({ params, searchParams }: PageProps<"/disciplinas
         where: { subjectid: aula_id },
         take: 1,
         skip: Math.max(0, parseInt(String(questaoIndex)) - 1),
-        include: { options: true, subject: {include: { discipline: true}}, responses: {orderBy: {createdAt: `desc`}} }
+        include: { options: {orderBy: { index: 'asc'}}, subject: {include: { discipline: true}}, responses: {orderBy: {createdAt: `desc`}} }
     })
 
     const hasResponse = questao?.responses.find(r => r.attemptid == attempt_id)
@@ -127,10 +128,14 @@ export default async function ({ params, searchParams }: PageProps<"/disciplinas
                         <Badge variant={`ghost`}>
                             Resultado: {(totalAcertos/(totalErros+totalAcertos)).toLocaleString(`pt-BR`, {style: `percent`})}
                         </Badge>
+
+                        <Button variant={`ghost`} asChild>
+                            <Link href={`?q=${questaoIndex}&edit=${questao?.id}`}>Editar</Link>
+                        </Button>
                     </div>
                 </CardContent>
                 <CardContent>
-                    {questao?.statement}
+                    <Markdown text={questao?.statement??''} />
                 </CardContent>
                 <CardContent>
                     <ItemGroup>
@@ -151,7 +156,9 @@ export default async function ({ params, searchParams }: PageProps<"/disciplinas
                                         {!hasResponse && (
                                             <input className="hidden" type="radio" name="option" value={o.index} id={o.id} />
                                         )}
-                                        <ItemDescription>{o.text}</ItemDescription>
+                                        <ItemDescription>
+                                            <Markdown text={o.text} />
+                                        </ItemDescription>
                                     </ItemContent>
                                 </Item>
                             </label>
